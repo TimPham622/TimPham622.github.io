@@ -13,14 +13,13 @@ import FadeIn from './components/FadeIn';
 import Blog from './components/Blog';
 import { ContentProvider } from './content/ContentProvider';
 import './index.scss';
-const siteBase = process.env.PUBLIC_URL || '';
 
 function App() {
     const [mode, setMode] = useState<string>(() => {
         try { return window.localStorage.getItem('tim-website-theme') === 'light' ? 'light' : 'dark'; }
         catch { return 'dark'; }
     });
-    const siteBase = process.env.PUBLIC_URL || (window.location.pathname.startsWith('/my-website') ? '/my-website' : '');
+    const siteBase = process.env.PUBLIC_URL || '';
     const blogPrefix = `${siteBase}/blog`;
     const pathname = window.location.pathname;
     const isBlogPage = pathname === blogPrefix || pathname.startsWith(`${blogPrefix}/`);

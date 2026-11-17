@@ -19,12 +19,11 @@ import { useContent } from '../content/ContentProvider';
 
 const drawerWidth = 240;
 const NAV_OFFSET = 78;
-const siteBase = process.env.PUBLIC_URL || '';
 
 function Navigation({parentToChild, modeChange, isBlogPage = false}: any) {
   const { content } = useContent();
   const navItems = content.navigation.items;
-  const siteBase = process.env.PUBLIC_URL || (window.location.pathname.startsWith('/my-website') ? '/my-website' : '');
+  const siteBase = process.env.PUBLIC_URL || '';
 
   const {mode} = parentToChild;
 

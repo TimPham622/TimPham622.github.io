@@ -25,7 +25,7 @@ type BlogIndex = {
 type BlogData = { index: BlogIndex; post?: Post };
 
 function siteBase() {
-  return process.env.PUBLIC_URL || (window.location.pathname.startsWith('/my-website') ? '/my-website' : '');
+  const siteBase = process.env.PUBLIC_URL || '';
 }
 
 function readEmbeddedData(slug: string | null): BlogData | null {
