@@ -13,6 +13,7 @@ import FadeIn from './components/FadeIn';
 import Blog from './components/Blog';
 import { ContentProvider } from './content/ContentProvider';
 import './index.scss';
+const siteBase = process.env.PUBLIC_URL || '';
 
 function App() {
     const [mode, setMode] = useState<string>(() => {

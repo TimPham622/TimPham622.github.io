@@ -47,7 +47,7 @@ test('keeps navigation above page content and scrolls nav links to sections', ()
 });
 
 test('opens a direct article route with homepage links and a persistent theme', () => {
-  window.history.pushState(null, '', '/my-website/blog/example-post/');
+  window.history.pushState(null, '', '/blog/example-post/');
   window.localStorage.setItem('tim-website-theme', 'light');
   const embedded = document.createElement('script');
   embedded.id = 'blog-data';
@@ -69,8 +69,8 @@ test('opens a direct article route with homepage links and a persistent theme', 
     expect(screen.getByText('A mathematical proof.')).toBeInTheDocument();
     expect(screen.getAllByRole('link', { name: 'Proof' })[0]).toHaveAttribute('href', '#proof');
     const topNavigation = screen.getAllByRole('navigation')[0];
-    expect(within(topNavigation).getByRole('link', { name: 'About me' })).toHaveAttribute('href', '/my-website/#about-me');
-    expect(within(topNavigation).getByRole('link', { name: 'Blog' })).toHaveAttribute('href', '/my-website/blog/');
+    expect(within(topNavigation).getByRole('link', { name: 'About me' })).toHaveAttribute('href', '/#about-me');
+    expect(within(topNavigation).getByRole('link', { name: 'Blog' })).toHaveAttribute('href', '/blog/');
     expect(document.querySelector('.blog-page')).toHaveClass('light-mode');
     fireEvent.click(screen.getByRole('button', { name: 'Switch to dark mode' }));
     expect(document.querySelector('.blog-page')).toHaveClass('dark-mode');

@@ -19,6 +19,7 @@ import { useContent } from '../content/ContentProvider';
 
 const drawerWidth = 240;
 const NAV_OFFSET = 78;
+const siteBase = process.env.PUBLIC_URL || '';
 
 function Navigation({parentToChild, modeChange, isBlogPage = false}: any) {
   const { content } = useContent();

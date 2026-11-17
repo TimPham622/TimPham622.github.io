@@ -19,8 +19,8 @@ const sourceDirectory = options.get('--source') || process.env.CMS_BLOG_SOURCE;
 const source = sourceDirectory ? path.resolve(sourceDirectory) : null;
 const cmsBlogUrl = (process.env.CMS_BLOG_URL || 'https://timpham622.github.io/cms/blog').replace(/\/$/, '');
 const feedRevision = Date.now().toString();
-const siteUrl = 'https://timpham622.github.io/my-website';
-const blogPath = '/my-website/blog';
+const siteUrl = 'https://timpham622.github.io';
+const blogPath = '/blog';
 const homepageUrl = `${siteUrl}/`;
 const blogUrl = `${siteUrl}/blog/`;
 
