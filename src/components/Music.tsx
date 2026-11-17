@@ -268,6 +268,14 @@ function Music() {
         return () => controller.abort();
     }, [recommendedAlbums, lastFmApiKey]);
 
+        const missingCovers = recommendedAlbums.filter(
+        (album) => !album.cover
+    );
+
+    if (!lastFmApiKey || missingCovers.length === 0) {
+        setRecommendedCovers({});
+        return;
+    }
     return (
         <div className="music-container" id="music">
             <h1>{music.heading}</h1>
@@ -364,7 +372,14 @@ function Music() {
                                 aria-expanded={isSelected}
                             >
                                 <span className="album-art">
-                                    <img src={image(album.cover)} alt={`${album.title} album cover`} />
+                                    <img
+                                        src={image(album.cover)}
+                                        alt={`${album.title} album cover`}
+                                        width={500}
+                                        height={500}
+                                        loading="lazy"
+                                        decoding="async"
+                                    />
                                 </span>
                                 <span className="album-info">
                                     <span className="album-title">{album.title}</span>
@@ -390,7 +405,7 @@ function Music() {
                 </div>
 
                 <div className="recommendations-grid">
-                    {recommendedAlbums.map((album) => {
+                    {missingCovers.map((album) => {
                         const cover = album.cover ? image(album.cover) : recommendedCovers[album.title];
 
                         return (

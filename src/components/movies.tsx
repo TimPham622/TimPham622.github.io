@@ -9,6 +9,9 @@ type TmdbShelfMovieConfig = {
     spine: string;
     tilt: number;
     offset: number;
+    poster?: string;
+    director?: string;
+    releaseDate?: string;
 };
 
 type ShelfMovie = TmdbShelfMovieConfig & {
@@ -130,7 +133,9 @@ function Movies() {
         setIsFlipped((currentFlipState) => !currentFlipState);
     };
 
-    const selectedShelfPoster = selectedShelfMovie?.posterPath ? `${tmdbImageBaseUrl}${selectedShelfMovie.posterPath}` : undefined;
+    const selectedShelfPoster = selectedShelfMovie?.poster
+        ? image(selectedShelfMovie.poster)
+        : undefined;
 
     return (
         <section className="movies-container" id="movies" aria-labelledby="movies-heading">
@@ -173,7 +178,14 @@ function Movies() {
                     >
                         <span className="movie-case-inner">
                             <span className="movie-case-face movie-case-front">
-                                <img src={image(selectedMovie.poster)} alt={`${selectedMovie.title} poster`} />
+                                <img
+                                src={image(selectedMovie.poster)}
+                                alt={`${selectedMovie.title} poster`}
+                                width={400}
+                                height={600}
+                                loading="lazy"
+                                decoding="async"
+                            />
                                 <span className="movie-case-title">{selectedMovie.title}</span>
                                 <span className="movie-case-meta">{selectedMovie.year} • {selectedMovie.format}</span>
                             </span>
@@ -228,7 +240,7 @@ function Movies() {
                         <dl>
                             <div>
                                 <dt>Director</dt>
-                                <dd>{selectedShelfMovie.director ?? "Loading from TMDB"}</dd>
+                                <dd>{selectedShelfMovie.director ?? "Not specified"}</dd>
                             </div>
                             <div>
                                 <dt>Release date</dt>
