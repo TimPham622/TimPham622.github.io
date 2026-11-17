@@ -226,15 +226,21 @@ function Music() {
         return () => controller.abort();
     }, [lastFmUsername, lastFmApiKey, chartDays, topTracksLimit]);
 
+
     useEffect(() => {
-        if (!lastFmApiKey) {
+        const missingCovers = recommendedAlbums.filter(
+            (album) => !album.cover
+        );
+
+        if (!lastFmApiKey || missingCovers.length === 0) {
+            setRecommendedCovers({});
             return;
         }
 
         const controller = new AbortController();
 
         Promise.all(
-            recommendedAlbums.map((album) => {
+            missingCovers.map((album) => {
                 const lastFmUrl = buildLastFmUrl({
                     method: "album.getinfo",
                     artist: album.artist,
@@ -245,18 +251,24 @@ function Music() {
 
                 return fetch(lastFmUrl, { signal: controller.signal })
                     .then((response) => response.json())
-                    .then((data: LastFmAlbum) => [album.title, getLargestImage(data.album?.image)] as const);
+                    .then((data: LastFmAlbum) =>
+                        [album.title, getLargestImage(data.album?.image)] as const
+                    );
             })
         )
             .then((covers) => {
-                setRecommendedCovers(
-                    covers.reduce<Record<string, string>>((albumCovers, [title, cover]) => {
-                        if (cover) {
-                            albumCovers[title] = cover;
-                        }
+                if (controller.signal.aborted) return;
 
-                        return albumCovers;
-                    }, {})
+                setRecommendedCovers(
+                    covers.reduce<Record<string, string>>(
+                        (albumCovers, [title, cover]) => {
+                            if (cover) {
+                                albumCovers[title] = cover;
+                            }
+                            return albumCovers;
+                        },
+                        {}
+                    )
                 );
             })
             .catch((error) => {
@@ -268,14 +280,7 @@ function Music() {
         return () => controller.abort();
     }, [recommendedAlbums, lastFmApiKey]);
 
-        const missingCovers = recommendedAlbums.filter(
-        (album) => !album.cover
-    );
 
-    if (!lastFmApiKey || missingCovers.length === 0) {
-        setRecommendedCovers({});
-        return;
-    }
     return (
         <div className="music-container" id="music">
             <h1>{music.heading}</h1>
@@ -405,7 +410,7 @@ function Music() {
                 </div>
 
                 <div className="recommendations-grid">
-                    {missingCovers.map((album) => {
+                    {recommendedAlbums.map((album) => {
                         const cover = album.cover ? image(album.cover) : recommendedCovers[album.title];
 
                         return (
