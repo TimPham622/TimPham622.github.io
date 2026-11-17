@@ -24,7 +24,7 @@ test('generates direct article HTML with metadata and excludes drafts', async ()
   try {
     await mkdir(path.join(source, 'posts'), { recursive: true });
     await mkdir(site);
-    await writeFile(path.join(site, 'index.html'), '<!doctype html><html><head><title>Tim Pham</title><meta name="description" content="Portfolio"><link rel="canonical" href="https://timpham622.github.io/my-website/"><meta property="og:url" content="https://timpham622.github.io/my-website/"></head><body><div id="root"></div><script src="/my-website/static/js/main.js"></script></body></html>');
+    await writeFile(path.join(site, 'index.html'), '<!doctype html><html><head><title>Tim Pham</title><meta name="description" content="Portfolio"><link rel="canonical" href="https://timpham622.github.io/"><meta property="og:url" content="https://timpham622.github.io/"></head><body><div id="root"></div><script src="/static/js/main.js"></script></body></html>');
     const summary = {
       title: 'A published post', slug: 'published-post', date: '2026-10-11', updated: '2026-10-11',
       summary: 'An article about mathematics.', tags: ['Mathematics'], coverUrl: '',
@@ -44,10 +44,10 @@ test('generates direct article HTML with metadata and excludes drafts', async ()
     const indexHtml = await readFile(path.join(site, 'blog', 'index.html'), 'utf8');
     const articleHtml = await readFile(path.join(site, 'blog', 'published-post', 'index.html'), 'utf8');
     assert.match(indexHtml, /<h1>Writing<\/h1>/);
-    assert.match(indexHtml, /\/my-website\/blog\/published-post\//);
+    assert.match(indexHtml, /blog\/published-post\//);
     assert.match(articleHtml, /<title>A published post \| Tim Pham<\/title>/);
     assert.match(articleHtml, /<meta name="description" content="An article about mathematics\."/);
-    assert.match(articleHtml, /<link rel="canonical" href="https:\/\/timpham622\.github\.io\/my-website\/blog\/published-post\/"/);
+    assert.match(articleHtml, /<link rel="canonical" href="https:\/\/timpham622\.github\.io\/blog\/published-post\/"/);
     assert.match(articleHtml, /<meta property="og:type" content="article"/);
     assert.match(articleHtml, /<h2 id="proof">Proof<\/h2>/);
     assert.match(articleHtml, /<script id="blog-data" type="application\/json">/);
@@ -58,9 +58,9 @@ test('generates direct article HTML with metadata and excludes drafts', async ()
 
     const { xml, entries } = await sitemapEntries(site);
     assert.deepEqual(entries.map((entry) => entry.loc), [
-      'https://timpham622.github.io/my-website/',
-      'https://timpham622.github.io/my-website/blog/',
-      'https://timpham622.github.io/my-website/blog/published-post/',
+      'https://timpham622.github.io/',
+      'https://timpham622.github.io/blog/',
+      'https://timpham622.github.io/blog/published-post/',
     ]);
     assert.equal(String(entries[2].lastmod), '2026-10-11');
     assert.match(articleHtml, new RegExp(`<link rel="canonical" href="${entries[2].loc}"`));
@@ -104,11 +104,11 @@ test('tracks multiple articles, update dates, title changes, unpublishing and de
     await sync();
     let sitemap = await sitemapEntries(site);
     assert.deepEqual(sitemap.entries.map((entry) => entry.loc), [
-      'https://timpham622.github.io/my-website/',
-      'https://timpham622.github.io/my-website/blog/',
-      'https://timpham622.github.io/my-website/blog/first-post/',
-      'https://timpham622.github.io/my-website/blog/second-post/',
-      'https://timpham622.github.io/my-website/blog/third-post/',
+      'https://timpham622.github.io/',
+      'https://timpham622.github.io/blog/',
+      'https://timpham622.github.io/blog/first-post/',
+      'https://timpham622.github.io/blog/second-post/',
+      'https://timpham622.github.io/blog/third-post/',
     ]);
     assert.deepEqual(sitemap.entries.slice(2).map((entry) => entry.lastmod ?? null), ['2026-10-04', '2026-09-01', null]);
 
@@ -119,7 +119,7 @@ test('tracks multiple articles, update dates, title changes, unpublishing and de
     await sync();
     sitemap = await sitemapEntries(site);
     assert.equal(String(sitemap.entries[2].lastmod), '2026-10-11');
-    assert.equal(sitemap.entries[2].loc, 'https://timpham622.github.io/my-website/blog/first-post/');
+    assert.equal(sitemap.entries[2].loc, 'https://timpham622.github.io/blog/first-post/');
     assert.match(await readFile(path.join(site, 'blog', 'first-post', 'index.html'), 'utf8'), /A new title/);
 
     index.posts = [first, third];

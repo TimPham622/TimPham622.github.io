@@ -18,7 +18,7 @@ test('escapes XML characters and rejects malformed calendar dates', () => {
 });
 
 test('makes valid XML with stable URLs, date fallback, no duplicates, and no invented lastmod', () => {
-  const homepageUrl = 'https://example.com/my-website/';
+  const homepageUrl = 'https://example.com/';
   const blogUrl = `${homepageUrl}blog/`;
   const articles = [
     { url: `${blogUrl}first/?source=a&version=2`, updated: '2026-10-11', date: '2026-10-01' },
