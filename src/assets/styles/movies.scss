@@ -280,7 +280,7 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
-    gap: 6px;
+    gap: 14px;
     min-height: 520px;
     padding: 34px 26px 46px;
     border: 1px solid rgba(255, 255, 255, 0.14);
@@ -313,11 +313,11 @@
     position: relative;
     z-index: 1;
     display: grid;
-    grid-template-columns: 1fr auto;
+    grid-template-columns: minmax(0, 1fr) auto;
     align-items: center;
-    gap: 12px;
+    gap: 8px;
     width: calc(100% - var(--dvd-offset));
-    min-height: 42px;
+    min-height: 52px;
     margin-left: var(--dvd-offset);
     border: 1px solid rgba(255, 255, 255, 0.22);
     border-radius: 3px;
@@ -330,8 +330,8 @@
     color: #ffffff;
     cursor: pointer;
     text-align: left;
-    transform: rotate(var(--dvd-tilt));
-    transform-origin: left center;
+    transform: rotate(clamp(-2deg, var(--dvd-tilt), 2deg));
+    transform-origin: center center;
     transition: transform 0.22s ease, box-shadow 0.22s ease, margin-left 0.22s ease;
 }
 
@@ -352,25 +352,31 @@
 }
 
 .dvd-spine span {
-    overflow: hidden;
-    font-size: 0.92rem;
+    min-width: 0;
+    overflow: visible;
+    font-size: 0.84rem;
     font-weight: 900;
-    letter-spacing: 0.03em;
-    text-overflow: ellipsis;
+    letter-spacing: 0.02em;
+    line-height: 1.2;
+    text-overflow: clip;
     text-transform: uppercase;
-    white-space: nowrap;
+    white-space: normal;
+    overflow-wrap: anywhere;
 }
 
 .dvd-spine small {
     color: rgba(255, 255, 255, 0.82);
     font-weight: 900;
+    font-size: 0.75rem;
+    white-space: nowrap;
+    padding-left: 0;
 }
 
 .dvd-spine:hover,
 .dvd-spine:focus-visible,
 .dvd-spine.is-selected {
-    margin-left: max(0px, calc(var(--dvd-offset) - 16px));
-    transform: translateX(10px) rotate(calc(var(--dvd-tilt) / 2));
+    margin-left: var(--dvd-offset);
+    transform: translateX(3px) rotate(clamp(-2deg, var(--dvd-tilt), 2deg));
     outline: 3px solid rgba(255, 255, 255, 0.86);
     outline-offset: 3px;
     box-shadow: 12px 16px 26px rgba(0, 0, 0, 0.34);
@@ -481,5 +487,12 @@
         .dvd-spine span {
             font-size: 0.78rem;
         }
+    }
+}
+
+// Keep the DVD shelf readable before the desktop panel becomes too narrow.
+@media screen and (max-width: 1120px) {
+    .dvd-rack-layout {
+        grid-template-columns: minmax(0, 1fr);
     }
 }
